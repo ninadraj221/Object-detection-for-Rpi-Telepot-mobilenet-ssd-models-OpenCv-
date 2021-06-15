@@ -1,0 +1,32 @@
+import telepot
+import time
+import os
+from picamera import PiCamera
+
+path=os.getenv("HOME")
+
+
+# Handling message from Telegram
+def handleMessage(msg):
+     id = msg['chat']['id'];
+     command = msg['text'];
+     print ('Command ' + command + ' from chat id' + str(id)); 
+     if (command == '/photo'):   
+       print ("Taking picture…");   
+       # Initialize the camera   
+       camera = PiCamera();   
+       camera.start_preview()   
+       camera.capture(path + '/pic.jpg',resize=(640,480))   
+       time.sleep(2)   
+       camera.stop_preview()   
+       camera.close()   
+       # Seding picture   
+       bot.sendPhoto(id, open(path + '/pic.jpg', 'rb'))
+     else:     
+       bot.sendMessage(id, "Command not found..")
+ 
+bot = telepot.Bot('1658601077:AAFXlb192Qjy7KLqsnT4rJAUaS7mK33p-No');
+bot.message_loop(handleMessage);
+print ("Listening to bot messages….");
+while 1:
+    time.sleep(10);     
